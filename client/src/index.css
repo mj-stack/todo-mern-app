@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+body {
+  background-image: linear-gradient(rgb(187, 94, 240), rgb(79, 53, 230));
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Edge */
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* For IE and Edge */
+  scrollbar-width: none; /* For Firefox */
+}
