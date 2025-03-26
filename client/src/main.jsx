@@ -21,12 +21,12 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Analytics>
-      <Provider store={todoStore}>
-        <RouterProvider router={router} />
-      </Provider>
-    </Analytics>
+    <Provider store={todoStore}>
+      <RouterProvider router={router} />
+      <Analytics />
+    </Provider>
   </StrictMode>
 );
