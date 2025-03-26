@@ -9,6 +9,7 @@ import AllTasks from "./routes/AllTasks.jsx";
 import { Provider } from "react-redux";
 import todoStore from "./store/index.js";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ createRoot(document.getElementById("root")).render(
     <Provider store={todoStore}>
       <RouterProvider router={router} />
       <Analytics />
+      <SpeedInsights />
     </Provider>
   </StrictMode>
 );
