@@ -1,11 +1,38 @@
 @import "tailwindcss";
 
+/* Existing styles */
+
+/* Add responsive base styles */
+html {
+  font-size: 16px;
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+}
+
 body {
   background-image: linear-gradient(rgb(187, 94, 240), rgb(79, 53, 230));
   background-repeat: no-repeat;
-  height: 100vh;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
+/* Ensure footer stays at bottom on mobile */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+/* Existing no-scrollbar styles */
 .no-scrollbar::-webkit-scrollbar {
   display: none; /* For Chrome, Safari, and Edge */
 }

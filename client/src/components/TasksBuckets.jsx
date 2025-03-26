@@ -24,8 +24,10 @@ const TasksBuckets = () => {
   return (
     <div
       className={`${
-        buckets.length === 0 ? "flex justify-center" : "grid grid-cols-3"
-      } bg-violet-600 rounded-3xl shadow-2xl max-w-[80%] pt-[20px] pb-[20px] ml-auto mr-auto mt-8 h-[330px] overflow-scroll no-scrollbar`}
+        buckets.length === 0
+          ? "flex justify-center"
+          : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+      } bg-violet-600 rounded-3xl shadow-2xl w-[95%] max-w-[1000px] p-5 mx-auto mt-8 h-[330px] overflow-y-auto no-scrollbar`}
     >
       {buckets.length === 0 ? (
         <EmptyBucketDisplay />
@@ -34,7 +36,7 @@ const TasksBuckets = () => {
           <div
             key={bucket.id}
             onClick={() => handleBucketClick(bucket.id)}
-            className="border-black-700 border-2 rounded-2xl w-[200px] h-[200px] mb-4 ml-auto mr-auto flex-col cursor-pointer transition-all duration-300 hover:translate-y-[-4px] hover:shadow-md relative group"
+            className="border-black-700 border-2 rounded-2xl w-[90%] max-w-[200px] h-[200px] mb-4 mx-auto flex-col cursor-pointer transition-all duration-300 hover:translate-y-[-4px] hover:shadow-md relative group"
           >
             <ImCancelCircle
               onClick={(e) => handleDeleteClick(e, bucket.id)}

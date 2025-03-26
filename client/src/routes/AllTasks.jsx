@@ -46,7 +46,7 @@ const AllTasks = () => {
   };
 
   return (
-    <main className="relative border border-gray-700 rounded-lg max-w-[1000px] h-[450px] mt-[60px] mx-auto flex-col bg-gray-900 shadow-xl">
+    <main className="relative border border-gray-700 rounded-lg w-[95%] max-w-[1000px] min-h-[450px] mt-[60px] mx-auto flex-col bg-gray-900 shadow-xl">
       <IoMdArrowRoundBack
         onClick={handleBackClick}
         className="cursor-pointer text-2xl absolute left-3 top-3 text-gray-400 hover:text-gray-200 transition-colors"
@@ -58,7 +58,7 @@ const AllTasks = () => {
       <div className="flex justify-center items-center h-[60px] bg-gradient-to-r from-indigo-900 to-purple-900 text-gray-100 font-bold text-2xl rounded-t-lg border-b border-gray-700">
         {selectedBucket.title}
       </div>
-      <div className="flex justify-evenly py-4 bg-gray-800/50 backdrop-blur-sm">
+      <div className="flex flex-col sm:flex-row justify-evenly gap-4 p-4 bg-gray-800/50 backdrop-blur-sm">
         <div className="px-6 py-3 bg-gray-900/80 rounded-xl shadow-lg border border-gray-700 hover:border-gray-600 transition-colors">
           <span className="text-gray-400">Total tasks:</span>
           <span className="ml-2 font-semibold text-gray-200">
@@ -78,8 +78,8 @@ const AllTasks = () => {
           </span>
         </div>
       </div>
-      <div className="max-h-[85%] flex overflow-y-auto px-4 py-2 gap-4">
-        <div className="flex-1/2 flex flex-col items-center overflow-scroll no-scrollbar">
+      <div className="max-h-[85%] flex flex-col lg:flex-row overflow-y-auto px-4 py-2 gap-4">
+        <div className="flex-1 flex flex-col items-center overflow-scroll no-scrollbar">
           <div className="text-white font-bold underline mb-2">
             Pending tasks:
           </div>
@@ -110,7 +110,7 @@ const AllTasks = () => {
               ))}
           </div>
         </div>
-        <div className="flex-1/2 flex flex-col items-center overflow-scroll no-scrollbar">
+        <div className="flex-1 flex flex-col items-center overflow-scroll no-scrollbar">
           <div className="text-white font-bold underline mb-2">
             Completed tasks:
           </div>

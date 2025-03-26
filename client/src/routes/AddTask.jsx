@@ -60,55 +60,64 @@ const AddTask = () => {
   };
 
   return (
-    <main className="border-2 border-black max-w-[1000px] h-[450px] mt-[60px] mr-auto ml-auto relative">
+    <main className="border-2 border-black w-[95%] max-w-[1000px] min-h-[450px] mt-[60px] mx-auto relative p-4">
       <button
         onClick={() => navigate("/")}
         className="flex justify-between items-center absolute left-[-15px] top-[-15px] bg-gray-800 text-white p-2 rounded-3xl cursor-pointer transition-transform duration-200 hover:scale-120"
       >
         <FaArrowLeft />
       </button>
-      <Form method="POST" className="h-auto w-[100%] flex flex-col">
-        <div className="flex justify-center font-bold text-2xl mb-4">
+      <Form method="POST" className="w-full flex flex-col">
+        <div className="flex justify-center font-bold text-xl sm:text-2xl mb-4">
           <h3>Create a bucket list</h3>
         </div>
-        <div className="ml-8 mr-8">
-          <label>
-            <LuNotebookText className="mb-2 ml-2" />
-          </label>
-          <input
-            required
-            ref={bucketTitle}
-            type="text"
-            placeholder="Your bucket heading"
-            className="bg-purple-700 placeholder:text-black placeholder:font-bold text-[16px] pl-4 font-bold shadow-2xl rounded-3xl w-[400px] mb-6 p-2 outline-0"
-          />
+        <div className="w-full px-2 sm:px-8">
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <div className="flex-1">
+              <label>
+                <LuNotebookText className="mb-2 ml-2" />
+              </label>
+              <input
+                required
+                ref={bucketTitle}
+                type="text"
+                placeholder="Your bucket heading"
+                className="bg-purple-700 placeholder:text-black placeholder:font-bold text-[16px] pl-4 font-bold shadow-2xl rounded-3xl w-full p-2 outline-0"
+              />
+            </div>
+            <div className="flex-1">
+              <label>
+                <HiOutlinePencilSquare className="mb-2 ml-2" />
+              </label>
+              <input
+                ref={bucketDescription}
+                type="text"
+                placeholder="Description (optional)"
+                className="bg-purple-700 placeholder:text-black placeholder:font-bold text-[16px] pl-4 font-bold shadow-2xl rounded-3xl w-full p-2 outline-0"
+              />
+            </div>
+          </div>
 
-          <label>
-            <HiOutlinePencilSquare className="mb-2 ml-2" />
-          </label>
-          <input
-            ref={bucketDescription}
-            type="text"
-            placeholder="Description (optional)"
-            className="bg-purple-700 placeholder:text-black placeholder:font-bold text-[16px] pl-4 font-bold shadow-2xl rounded-3xl w-[400px] mb-6 p-2 outline-0"
-          />
-
-          <label className="flex w-[100%] items-center">
-            <FaTasks className="mb-3 ml-3" />
-            <button
-              onClick={handleAddTask}
-              title="Add task"
-              className="ml-[870px] mb-1 bg-gray-900 p-2 text-white rounded-3xl cursor-pointer "
-            >
-              <MdAddTask />
-            </button>
-          </label>
-          <input
-            ref={bucketTask}
-            type="text"
-            placeholder="Add your tasks"
-            className="bg-purple-700 placeholder:text-black placeholder:font-bold text-[16px] pl-4 font-bold shadow-2xl rounded-3xl w-[100%] mb-6 p-2 outline-0"
-          />
+          <div className="relative w-full mb-6">
+            <label className="flex items-center mb-2">
+              <FaTasks className="ml-3" />
+            </label>
+            <div className="flex gap-2">
+              <input
+                ref={bucketTask}
+                type="text"
+                placeholder="Add your tasks"
+                className="bg-purple-700 placeholder:text-black placeholder:font-bold text-[16px] pl-4 font-bold shadow-2xl rounded-3xl flex-1 p-2 outline-0"
+              />
+              <button
+                onClick={handleAddTask}
+                title="Add task"
+                className="bg-gray-900 p-2 text-white rounded-3xl cursor-pointer"
+              >
+                <MdAddTask />
+              </button>
+            </div>
+          </div>
         </div>
         <button
           title="Create new bucket"
