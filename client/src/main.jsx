@@ -8,6 +8,7 @@ import TaskCenter from "./components/TaskCenter.jsx";
 import AllTasks from "./routes/AllTasks.jsx";
 import { Provider } from "react-redux";
 import todoStore from "./store/index.js";
+import { Analytics } from "@vercel/analytics/react";
 
 const router = createBrowserRouter([
   {
@@ -22,8 +23,10 @@ const router = createBrowserRouter([
 ]);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Provider store={todoStore}>
-      <RouterProvider router={router} />
-    </Provider>
+    <Analytics>
+      <Provider store={todoStore}>
+        <RouterProvider router={router} />
+      </Provider>
+    </Analytics>
   </StrictMode>
 );
