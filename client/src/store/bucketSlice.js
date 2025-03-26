@@ -6,7 +6,7 @@ const bucketSlice = createSlice({
   reducers: {
     addBucket: (state, action) => {
       state.push({
-        id: new Date(),
+        id: String(new Date()),
         title: action.payload.title,
         description: action.payload.description,
         tasks: action.payload.tasks,

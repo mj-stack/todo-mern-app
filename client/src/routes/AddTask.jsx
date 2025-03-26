@@ -38,6 +38,7 @@ const AddTask = () => {
     bucketTitle.current.value = "";
     bucketDescription.current.value = "";
     setDisplayTask([]);
+    navigate("/");
   };
 
   const handleAddTask = (e) => {
@@ -47,7 +48,11 @@ const AddTask = () => {
     if (!taskValue) return; // Prevent adding empty tasks
 
     // Update state with the new task
-    setDisplayTask((prevTasks) => [...prevTasks, taskValue]);
+    setDisplayTask((prevTasks) => [
+      ...prevTasks,
+      { task: taskValue, completed: false },
+    ]);
+    console.log(displayTask);
     bucketTask.current.value = ""; // Clear input field
   };
 
@@ -89,7 +94,8 @@ const AddTask = () => {
             <FaTasks className="mb-3 ml-3" />
             <button
               onClick={handleAddTask}
-              className="ml-[870px] mb-1 bg-gray-900 p-2 text-white rounded-3xl cursor-pointer"
+              title="Add task"
+              className="ml-[870px] mb-1 bg-gray-900 p-2 text-white rounded-3xl cursor-pointer "
             >
               <MdAddTask />
             </button>
@@ -102,6 +108,7 @@ const AddTask = () => {
           />
         </div>
         <button
+          title="Create new bucket"
           onClick={handleAddBucket}
           type="submit"
           className="flex justify-between items-center absolute right-[-15px] top-[-15px] bg-gray-800 text-white p-2 rounded-3xl cursor-pointer"
@@ -109,7 +116,7 @@ const AddTask = () => {
           <IoMdAdd />
         </button>
       </Form>
-      <Tasks displayTask={displayTask} />
+      <Tasks displayTask={displayTask} setDisplayTask={setDisplayTask} />
     </main>
   );
 };

@@ -5,9 +5,14 @@ import EmptyBucketDisplay from "./EmptyBucketDisplay";
 const TasksBuckets = () => {
   const navigate = useNavigate();
   const buckets = useSelector((store) => store.bucket);
+  console.log(buckets);
 
   return (
-    <div className="bg-violet-600 rounded-3xl shadow-2xl max-w-[80%] pt-[20px] pb-[20px] ml-auto mr-auto mt-8 h-[330px] grid grid-cols-3   overflow-scroll no-scrollbar">
+    <div
+      className={`${
+        buckets.length === 0 ? "flex justify-center" : "grid grid-cols-3"
+      } bg-violet-600 rounded-3xl shadow-2xl max-w-[80%] pt-[20px] pb-[20px] ml-auto mr-auto mt-8  h-[330px] overflow-scroll no-scrollbar `}
+    >
       {buckets.length === 0 ? (
         <EmptyBucketDisplay />
       ) : (
@@ -24,8 +29,13 @@ const TasksBuckets = () => {
             </div>
             <div className="h-[150px] flex-col justify-items-center items-center flex-5 content-center">
               <p className="font-bold">Total tasks: {bucket.tasks.length}</p>
-              <p className="font-bold">Completed: 0</p>
-              <p className="font-bold">Pending: 0</p>
+              <p className="font-bold">
+                Completed:{" "}
+                {bucket.tasks.filter((todo) => todo.completed).length}
+              </p>
+              <p className="font-bold">
+                Pending: {bucket.tasks.filter((todo) => !todo.completed).length}
+              </p>
             </div>
           </div>
         ))
