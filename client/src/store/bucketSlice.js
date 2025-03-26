@@ -12,8 +12,18 @@ const bucketSlice = createSlice({
         tasks: action.payload.tasks,
       });
     },
-    addTaskToBucket: (state, action) => {
-      const { bucketId, task } = action.payload;
+    deleteBucket: (state, action) => {
+      return state.filter((bucket) => bucket.id !== action.payload);
+    },
+    markTaskCompleted: (state, action) => {
+      const { bucketId, taskId } = action.payload;
+      const bucket = state.find((b) => b.id === bucketId);
+      if (bucket) {
+        const task = bucket.tasks.find((t) => t.id === taskId);
+        if (task) {
+          task.completed = !task.completed;
+        }
+      }
     },
   },
 });

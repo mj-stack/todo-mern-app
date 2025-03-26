@@ -28,6 +28,9 @@ const AddTask = () => {
     if (!title) {
       alert("Please provide a bucket title.");
       return;
+    } else if (displayTask.length === 0) {
+      alert("Add at least one task");
+      return;
     }
 
     dispatch(
