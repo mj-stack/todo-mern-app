@@ -87,7 +87,7 @@ const AddTask = () => {
   };
 
   return (
-    <main className="border-2 border-black w-[95%] max-w-[1000px] max-h-[450px] mt-[60px] mx-auto relative p-4">
+    <main className="border-2 border-black w-[80%] max-w-[1000px] max-h-[450px] mt-[60px] mx-auto relative p-4">
       <button
         onClick={() => navigate("/")}
         className="flex justify-between items-center absolute left-[-15px] top-[-15px] bg-gray-800 text-white p-2 rounded-3xl cursor-pointer transition-transform duration-200 hover:scale-120"
@@ -135,7 +135,7 @@ const AddTask = () => {
                 ref={bucketTask}
                 type="text"
                 placeholder="Add your tasks"
-                className="bg-purple-700 placeholder:text-black placeholder:font-bold text-[16px] pl-4 font-bold shadow-2xl rounded-3xl flex-1 p-2 outline-0"
+                className="bg-purple-700 placeholder:text-black placeholder:font-bold text-[16px] pl-4 font-bold shadow-2xl rounded-3xl flex-1 p-2 outline-0 w-fit"
               />
               <button
                 onClick={handleAddTask}

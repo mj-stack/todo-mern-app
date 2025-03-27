@@ -58,7 +58,7 @@ const TasksBuckets = () => {
           >
             <ImCancelCircle
               onClick={(e) => handleDeleteClick(e, bucket.id)}
-              className="text-xl text-red-500 opacity-0 group-hover:opacity-100 rounded-2xl absolute right-2 top-2 transition-all duration-300 z-10"
+              className="text-xl text-red-500 rounded-2xl absolute right-2 top-2 transition-all duration-300 z-10"
             />
             <FaEdit
               onClick={(e) =>
@@ -70,7 +70,7 @@ const TasksBuckets = () => {
                   bucket.tasks
                 )
               }
-              className="text-xl text-blue-500 opacity-0 group-hover:opacity-100 rounded-2xl absolute left-2 top-2 transition-all duration-300 z-10"
+              className="text-xl text-blue-500 rounded-2xl absolute left-2 top-2 transition-all duration-300 z-10"
             />
             <div className="bg-black text-white font-bold flex justify-center rounded-t-[10px] flex-1 py-2">
               {bucket.title}
