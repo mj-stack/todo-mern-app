@@ -2,8 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import EmptyBucketDisplay from "./EmptyBucketDisplay";
 import { ImCancelCircle } from "react-icons/im";
+import { FaEdit } from "react-icons/fa"; // Import edit icon
 import { bucketActions } from "../store/bucketSlice";
-import { useState } from "react";
 
 const TasksBuckets = () => {
   const navigate = useNavigate();
@@ -19,6 +19,24 @@ const TasksBuckets = () => {
     if (window.confirm("Are you sure you want to delete this bucket?")) {
       dispatch(bucketActions.deleteBucket(bucketId));
     }
+  };
+
+  const handleEditClick = (
+    e,
+    fillBucketId,
+    fillBucketTitle,
+    fillBucketDescription,
+    fillBucketTasks
+  ) => {
+    e.stopPropagation();
+    navigate(`/add-task`, {
+      state: {
+        fillBucketId,
+        fillBucketTitle,
+        fillBucketDescription,
+        fillBucketTasks,
+      },
+    });
   };
 
   return (
@@ -41,6 +59,18 @@ const TasksBuckets = () => {
             <ImCancelCircle
               onClick={(e) => handleDeleteClick(e, bucket.id)}
               className="text-xl text-red-500 opacity-0 group-hover:opacity-100 rounded-2xl absolute right-2 top-2 transition-all duration-300 z-10"
+            />
+            <FaEdit
+              onClick={(e) =>
+                handleEditClick(
+                  e,
+                  bucket.id,
+                  bucket.title,
+                  bucket.description,
+                  bucket.tasks
+                )
+              }
+              className="text-xl text-blue-500 opacity-0 group-hover:opacity-100 rounded-2xl absolute left-2 top-2 transition-all duration-300 z-10"
             />
             <div className="bg-black text-white font-bold flex justify-center rounded-t-[10px] flex-1 py-2">
               {bucket.title}

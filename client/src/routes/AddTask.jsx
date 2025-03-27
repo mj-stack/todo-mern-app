@@ -4,11 +4,12 @@ import { FaTasks } from "react-icons/fa";
 import { MdAddTask } from "react-icons/md";
 import { IoMdAdd } from "react-icons/io";
 import { FaArrowLeft } from "react-icons/fa";
-import { Form, useNavigate } from "react-router";
+import { Form, useLocation, useNavigate } from "react-router";
 import Tasks from "../components/Tasks";
 import { useDispatch } from "react-redux";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { bucketActions } from "../store/bucketSlice";
+import { IoIosSave } from "react-icons/io";
 
 const AddTask = () => {
   const navigate = useNavigate();
@@ -18,6 +19,21 @@ const AddTask = () => {
   const bucketTitle = useRef();
   const bucketDescription = useRef();
   const bucketTask = useRef();
+  const location = useLocation();
+  const {
+    fillBucketId,
+    fillBucketTitle,
+    fillBucketDescription,
+    fillBucketTasks,
+  } = location.state || {};
+
+  useEffect(() => {
+    if (fillBucketId) {
+      bucketTitle.current.value = fillBucketTitle || "";
+      bucketDescription.current.value = fillBucketDescription || "";
+      setDisplayTask(fillBucketTasks || []);
+    }
+  }, [fillBucketId, fillBucketTitle, fillBucketDescription, fillBucketTasks]);
 
   const handleAddBucket = (e) => {
     e.preventDefault();
@@ -33,11 +49,21 @@ const AddTask = () => {
       return;
     }
 
-    dispatch(
-      bucketActions.addBucket({ title, description, tasks: [...displayTask] })
-    );
+    if (fillBucketId) {
+      dispatch(
+        bucketActions.updateBucket({
+          id: fillBucketId,
+          title,
+          description,
+          tasks: [...displayTask],
+        })
+      );
+    } else {
+      dispatch(
+        bucketActions.addBucket({ title, description, tasks: [...displayTask] })
+      );
+    }
 
-    // Reset fields
     bucketTitle.current.value = "";
     bucketDescription.current.value = "";
     setDisplayTask([]);
@@ -48,19 +74,20 @@ const AddTask = () => {
     e.preventDefault();
 
     const taskValue = bucketTask.current.value.trim();
-    if (!taskValue) return; // Prevent adding empty tasks
+    if (!taskValue) return;
 
-    // Update state with the new task
-    setDisplayTask((prevTasks) => [
-      ...prevTasks,
-      { task: taskValue, completed: false },
-    ]);
-    console.log(displayTask);
-    bucketTask.current.value = ""; // Clear input field
+    setDisplayTask((prevTasks) => {
+      const updatedTasks = [
+        ...prevTasks,
+        { task: taskValue, completed: false, id: String(new Date()) },
+      ];
+      return updatedTasks;
+    });
+    bucketTask.current.value = "";
   };
 
   return (
-    <main className="border-2 border-black w-[95%] max-w-[1000px] min-h-[450px] mt-[60px] mx-auto relative p-4">
+    <main className="border-2 border-black w-[95%] max-w-[1000px] max-h-[450px] mt-[60px] mx-auto relative p-4">
       <button
         onClick={() => navigate("/")}
         className="flex justify-between items-center absolute left-[-15px] top-[-15px] bg-gray-800 text-white p-2 rounded-3xl cursor-pointer transition-transform duration-200 hover:scale-120"
@@ -79,6 +106,7 @@ const AddTask = () => {
               </label>
               <input
                 required
+                maxLength="10"
                 ref={bucketTitle}
                 type="text"
                 placeholder="Your bucket heading"
@@ -112,7 +140,7 @@ const AddTask = () => {
               <button
                 onClick={handleAddTask}
                 title="Add task"
-                className="bg-gray-900 p-2 text-white rounded-3xl cursor-pointer"
+                className="bg-gray-900 p-2 pl-6 pr-6 text-white rounded-3xl cursor-pointer"
               >
                 <MdAddTask />
               </button>
@@ -120,12 +148,12 @@ const AddTask = () => {
           </div>
         </div>
         <button
-          title="Create new bucket"
+          title={`${fillBucketId ? "Save edits" : "Create new bucket"}`}
           onClick={handleAddBucket}
           type="submit"
           className="flex justify-between items-center absolute right-[-15px] top-[-15px] bg-gray-800 text-white p-2 rounded-3xl cursor-pointer"
         >
-          <IoMdAdd />
+          {fillBucketId ? <IoIosSave /> : <IoMdAdd />}
         </button>
       </Form>
       <Tasks displayTask={displayTask} setDisplayTask={setDisplayTask} />
