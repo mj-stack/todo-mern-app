@@ -8,7 +8,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 const TasksBuckets = () => {
-  const apiUrl = import.meta.env.VITE_BACKEND_URI;
+  const apiUrl = import.meta.env.BACKEND_URI;
   const navigate = useNavigate();
   const buckets = useSelector((store) => store.bucket);
   const dispatch = useDispatch();

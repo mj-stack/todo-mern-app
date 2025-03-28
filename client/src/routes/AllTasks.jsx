@@ -10,7 +10,7 @@ import { format } from "date-fns";
 import axios from "axios";
 
 const AllTasks = () => {
-  const apiUrl = import.meta.env.VITE_BACKEND_URI;
+  const apiUrl = import.meta.env.BACKEND_URI;
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
