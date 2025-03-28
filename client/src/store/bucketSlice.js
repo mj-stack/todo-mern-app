@@ -6,11 +6,19 @@ const bucketSlice = createSlice({
   reducers: {
     addBucket: (state, action) => {
       state.push({
-        id: String(new Date()),
+        id: action.payload._id,
         title: action.payload.title,
         description: action.payload.description,
         tasks: action.payload.tasks,
       });
+    },
+    setBuckets: (state, action) => {
+      return action.payload.map((bucket) => ({
+        id: bucket._id,
+        title: bucket.title,
+        description: bucket.description,
+        tasks: bucket.tasks,
+      }));
     },
     deleteBucket: (state, action) => {
       return state.filter((bucket) => bucket.id !== action.payload);

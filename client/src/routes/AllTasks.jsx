@@ -5,15 +5,46 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
 import { bucketActions } from "../store/bucketSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
+import axios from "axios";
 
 const AllTasks = () => {
+  const apiUrl = import.meta.env.VITE_BACKEND_URI;
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { bucketId } = location.state || {};
-  const buckets = useSelector((state) => state.bucket);
+  const [tasks, setTasks] = useState([]);
+  const [bucket, setBucket] = useState();
+
+  useEffect(() => {
+    const fetchBuckets = async () => {
+      try {
+        const response = await axios.get(
+          `${apiUrl}/all-tasks/buckets/${bucketId}`
+        );
+        setBucket(response.data.data);
+      } catch (error) {
+        console.error("Error:", error.message);
+      }
+    };
+
+    fetchBuckets();
+  }, [apiUrl]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/all-tasks/${bucketId}`);
+        setTasks(response.data.tasks);
+      } catch (error) {
+        console.error("Error:", error.message);
+      }
+    };
+
+    fetchData();
+  }, [apiUrl]);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -25,14 +56,13 @@ const AllTasks = () => {
     setShowModal(false);
   };
 
-  const selectedBucket = buckets.find((bucket) => bucket.id === bucketId);
-
-  if (!selectedBucket) {
-    return <p className="text-red-500">Bucket not found!</p>;
-  }
-
-  const toggleTaskCompletion = (taskId) => {
-    dispatch(bucketActions.markTaskCompleted({ bucketId, taskId }));
+  const toggleTaskCompletion = async (taskId) => {
+    await axios.patch(`${apiUrl}/all-tasks/${taskId}`);
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task._id === taskId ? { ...task, completed: !task.completed } : task
+      )
+    );
   };
 
   const deleteTask = (taskId) => {
@@ -56,25 +86,25 @@ const AllTasks = () => {
         className="cursor-pointer text-2xl absolute right-3 top-3 text-gray-400 hover:text-gray-200 transition-colors"
       />
       <div className="flex justify-center items-center h-[60px] bg-gradient-to-r from-indigo-900 to-purple-900 text-gray-100 font-bold text-2xl rounded-t-lg border-b border-gray-700">
-        {selectedBucket.title}
+        {bucket?.title}
       </div>
       <div className="flex flex-col sm:flex-row justify-evenly gap-4 p-4 bg-gray-800/50 backdrop-blur-sm">
         <div className="px-6 py-3 bg-gray-900/80 rounded-xl shadow-lg border border-gray-700 hover:border-gray-600 transition-colors">
           <span className="text-gray-400">Total tasks:</span>
           <span className="ml-2 font-semibold text-gray-200">
-            {selectedBucket.tasks.length}
+            {tasks.length}
           </span>
         </div>
         <div className="px-6 py-3 bg-gray-900/80 rounded-xl shadow-lg border border-gray-700 hover:border-gray-600 transition-colors">
           <span className="text-gray-400">Task completed:</span>
           <span className="ml-2 font-semibold text-gray-200">
-            {selectedBucket.tasks.filter((todo) => todo.completed).length}
+            {tasks.filter((todo) => todo.completed).length}
           </span>
         </div>
         <div className="px-6 py-3 bg-gray-900/80 rounded-xl shadow-lg border border-gray-700 hover:border-gray-600 transition-colors">
           <span className="text-gray-400">Task pending:</span>
           <span className="ml-2 font-semibold text-gray-200">
-            {selectedBucket.tasks.filter((todo) => !todo.completed).length}
+            {tasks.filter((todo) => !todo.completed).length}
           </span>
         </div>
       </div>
@@ -84,17 +114,17 @@ const AllTasks = () => {
             Pending tasks:
           </div>
           <div className="w-[100%] h-[270px] flex flex-col justify-items-center">
-            {selectedBucket.tasks
+            {tasks
               .filter((task) => !task.completed)
               .map((task) => (
                 <div
-                  key={task.id}
+                  key={task._id}
                   className="border border-gray-700 rounded-lg w-[80%] flex items-center min-h-[50px] px-4 bg-gray-800 hover:bg-gray-750 transition-colors group mb-4 ml-auto mr-auto"
                 >
                   <div className="flex-1 text-gray-300">{task.task}</div>
                   <div className="flex items-center space-x-3">
                     <button
-                      onClick={() => toggleTaskCompletion(task.id)}
+                      onClick={() => toggleTaskCompletion(task._id)}
                       className="p-2 hover:bg-gray-700 rounded-full transition-colors"
                     >
                       <IoCheckmarkDoneSharp className="text-green-400 text-xl hover:text-green-300" />
@@ -115,11 +145,11 @@ const AllTasks = () => {
             Completed tasks:
           </div>
           <div className="w-[100%] h-[270px] flex flex-col justify-items-center">
-            {selectedBucket.tasks
+            {tasks
               .filter((task) => task.completed)
               .map((task) => (
                 <div
-                  key={task.id}
+                  key={task._id}
                   className="border border-gray-700 rounded-lg w-[80%] flex items-center min-h-[50px] px-4 bg-gray-800/50 group mb-4 ml-auto mr-auto"
                 >
                   <div className="flex-1">
@@ -159,16 +189,15 @@ const AllTasks = () => {
             </h3>
             <div className="text-gray-300">
               <p className="mb-2">
-                <span className="font-semibold">Title:</span>{" "}
-                {selectedBucket.title}
+                <span className="font-semibold">Title:</span> {bucket.title}
               </p>
               <p className="mb-2">
                 <span className="font-semibold">Description:</span>{" "}
-                {selectedBucket.description || "No description available"}
+                {bucket.description || "No description available"}
               </p>
               <p className="mb-2">
                 <span className="font-semibold">Created:</span>{" "}
-                {new Date(selectedBucket.id).toLocaleDateString()}
+                {new Date().toLocaleDateString()}
               </p>
             </div>
           </div>

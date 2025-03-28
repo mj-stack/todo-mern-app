@@ -1,3 +1,4 @@
+import axios from "axios";
 import { LuNotebookText } from "react-icons/lu";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { FaTasks } from "react-icons/fa";
@@ -12,6 +13,7 @@ import { bucketActions } from "../store/bucketSlice";
 import { IoIosSave } from "react-icons/io";
 
 const AddTask = () => {
+  const apiUrl = import.meta.env.VITE_BACKEND_URI;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [displayTask, setDisplayTask] = useState([]);
@@ -35,7 +37,7 @@ const AddTask = () => {
     }
   }, [fillBucketId, fillBucketTitle, fillBucketDescription, fillBucketTasks]);
 
-  const handleAddBucket = (e) => {
+  const handleAddBucket = async (e) => {
     e.preventDefault();
 
     const title = bucketTitle.current.value.trim();
@@ -58,10 +60,18 @@ const AddTask = () => {
           tasks: [...displayTask],
         })
       );
-    } else {
-      dispatch(
-        bucketActions.addBucket({ title, description, tasks: [...displayTask] })
-      );
+    }
+
+    const bucket = {
+      title,
+      description,
+      tasks: displayTask,
+    };
+
+    try {
+      const response = await axios.post(`${apiUrl}/add-task`, bucket);
+    } catch (error) {
+      console.error("Error sending data:", error);
     }
 
     bucketTitle.current.value = "";
@@ -87,16 +97,16 @@ const AddTask = () => {
   };
 
   return (
-    <main className="border-2 border-black w-[80%] max-w-[1000px] max-h-[450px] mt-[60px] mx-auto relative p-4">
+    <main className="bg-gray-900 w-[90%] max-w-[1000px] max-h-[600px] mt-[60px] mx-auto relative p-8 rounded-2xl shadow-2xl text-white">
       <button
         onClick={() => navigate("/")}
-        className="flex justify-between items-center absolute left-[-15px] top-[-15px] bg-gray-800 text-white p-2 rounded-3xl cursor-pointer transition-transform duration-200 hover:scale-120"
+        className="flex justify-between items-center absolute left-[-15px] top-[-15px] bg-purple-700 hover:bg-purple-600 text-white p-3 rounded-xl cursor-pointer transition-all duration-300 shadow-lg"
       >
         <FaArrowLeft />
       </button>
       <Form method="POST" className="w-full flex flex-col">
-        <div className="flex justify-center font-bold text-xl sm:text-2xl mb-4">
-          <h3>Create a bucket list</h3>
+        <div className="flex justify-center font-bold text-xl sm:text-3xl mb-8">
+          <h3 className="text-purple-400">Create a bucket list</h3>
         </div>
         <div className="w-full px-2 sm:px-8">
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
@@ -110,7 +120,7 @@ const AddTask = () => {
                 ref={bucketTitle}
                 type="text"
                 placeholder="Your bucket heading"
-                className="bg-purple-700 placeholder:text-black placeholder:font-bold text-[16px] pl-4 font-bold shadow-2xl rounded-3xl w-full p-2 outline-0"
+                className="bg-gray-800 placeholder:text-gray-400 text-[16px] pl-4 font-medium shadow-lg rounded-xl w-full p-3 outline-none border-2 border-purple-700 focus:border-purple-500 transition-all"
               />
             </div>
             <div className="flex-1">
@@ -121,7 +131,7 @@ const AddTask = () => {
                 ref={bucketDescription}
                 type="text"
                 placeholder="Description (optional)"
-                className="bg-purple-700 placeholder:text-black placeholder:font-bold text-[16px] pl-4 font-bold shadow-2xl rounded-3xl w-full p-2 outline-0"
+                className="bg-gray-800 placeholder:text-gray-400 text-[16px] pl-4 font-medium shadow-lg rounded-xl w-full p-3 outline-none border-2 border-purple-700 focus:border-purple-500 transition-all"
               />
             </div>
           </div>
@@ -135,14 +145,14 @@ const AddTask = () => {
                 ref={bucketTask}
                 type="text"
                 placeholder="Add your tasks"
-                className="bg-purple-700 placeholder:text-black placeholder:font-bold text-[16px] pl-4 font-bold shadow-2xl rounded-3xl flex-1 p-2 outline-0 w-fit"
+                className="bg-gray-800 placeholder:text-gray-400 text-[16px] pl-4 font-medium shadow-lg rounded-xl flex-1 p-3 outline-none border-2 border-purple-700 focus:border-purple-500 transition-all"
               />
               <button
                 onClick={handleAddTask}
                 title="Add task"
-                className="bg-gray-900 p-2 pl-6 pr-6 text-white rounded-3xl cursor-pointer"
+                className="bg-purple-700 hover:bg-purple-600 p-3 px-6 text-white rounded-xl cursor-pointer transition-all duration-300 shadow-lg"
               >
-                <MdAddTask />
+                <MdAddTask className="text-xl" />
               </button>
             </div>
           </div>
@@ -151,9 +161,13 @@ const AddTask = () => {
           title={`${fillBucketId ? "Save edits" : "Create new bucket"}`}
           onClick={handleAddBucket}
           type="submit"
-          className="flex justify-between items-center absolute right-[-15px] top-[-15px] bg-gray-800 text-white p-2 rounded-3xl cursor-pointer"
+          className="flex justify-between items-center absolute right-[-15px] top-[-15px] bg-purple-700 hover:bg-purple-600 text-white p-3 rounded-xl cursor-pointer transition-all duration-300 shadow-lg"
         >
-          {fillBucketId ? <IoIosSave /> : <IoMdAdd />}
+          {fillBucketId ? (
+            <IoIosSave className="text-xl" />
+          ) : (
+            <IoMdAdd className="text-xl" />
+          )}
         </button>
       </Form>
       <Tasks displayTask={displayTask} setDisplayTask={setDisplayTask} />

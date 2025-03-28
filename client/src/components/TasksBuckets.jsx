@@ -2,22 +2,55 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import EmptyBucketDisplay from "./EmptyBucketDisplay";
 import { ImCancelCircle } from "react-icons/im";
-import { FaEdit } from "react-icons/fa"; // Import edit icon
+import { FaEdit } from "react-icons/fa";
 import { bucketActions } from "../store/bucketSlice";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const TasksBuckets = () => {
+  const apiUrl = import.meta.env.VITE_BACKEND_URI;
   const navigate = useNavigate();
   const buckets = useSelector((store) => store.bucket);
   const dispatch = useDispatch();
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}`);
+        dispatch(bucketActions.setBuckets(response.data.data));
+
+        const taskResponses = await Promise.all(
+          buckets.map((bucket) => axios.get(`${apiUrl}/${bucket.id}`))
+        );
+        let tasksArray = [];
+        taskResponses.forEach((obj) => {
+          tasksArray = [...tasksArray, obj.data.tasks];
+          setTasks(tasksArray);
+        });
+      } catch (error) {
+        console.error("Error:", error.message);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleBucketClick = (bucketId) => {
     navigate("/all-tasks", { state: { bucketId } });
   };
 
-  const handleDeleteClick = (e, bucketId) => {
-    e.stopPropagation(); // Prevent bucket navigation when clicking delete
+  const handleDeleteClick = async (e, bucketId) => {
+    e.stopPropagation();
     if (window.confirm("Are you sure you want to delete this bucket?")) {
-      dispatch(bucketActions.deleteBucket(bucketId));
+      try {
+        const response = await axios.delete(`${apiUrl}/${bucketId}`);
+        console.log("Bucket deleted", response);
+
+        dispatch(bucketActions.deleteBucket(bucketId));
+      } catch (error) {
+        console.error("Error deleting bucket:", error.message);
+      }
     }
   };
 
@@ -79,10 +112,25 @@ const TasksBuckets = () => {
               <p className="font-bold">Total tasks: {bucket.tasks.length}</p>
               <p className="font-bold">
                 Completed:{" "}
-                {bucket.tasks.filter((todo) => todo.completed).length}
+                {
+                  tasks
+                    .flat()
+                    .filter(
+                      (task) =>
+                        task.bucket === bucket.id && task.completed === true
+                    ).length
+                }
               </p>
               <p className="font-bold">
-                Pending: {bucket.tasks.filter((todo) => !todo.completed).length}
+                Pending:{" "}
+                {
+                  tasks
+                    .flat()
+                    .filter(
+                      (task) =>
+                        task.bucket === bucket.id && task.completed === false
+                    ).length
+                }
               </p>
             </div>
           </div>
