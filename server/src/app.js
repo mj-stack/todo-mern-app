@@ -30,6 +30,10 @@ app.use(
 import { bucketRoutes } from "./routes/bucket.routes.js";
 
 // Routes declaration
+app.get("/", (req, res) => {
+  res.send("Backend is running!");
+});
+
 app.use(bucketRoutes);
 
 export { app };
