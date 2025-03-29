@@ -3,6 +3,7 @@ import { Task } from "../models/task.model.js";
 
 const addBucket = async (req, res) => {
   const { title, description, tasks } = req.body;
+  console.log(title, description, tasks);
 
   try {
     const bucket = await Bucket.create({ title, description });
@@ -73,6 +74,7 @@ const showBuckets = async (req, res) => {
     }
 
     const buckets = await Bucket.find();
+    console.log(buckets);
     res.status(200).json({ data: buckets });
   } catch (error) {
     res

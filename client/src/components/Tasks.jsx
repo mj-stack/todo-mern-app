@@ -10,13 +10,13 @@ const Tasks = ({ displayTask, setDisplayTask }) => {
       {displayTask.map((task, index) => (
         <div
           key={index}
-          className="border-2 border-black rounded-3xl w-[90%] ml-auto mr-auto flex items-center h-[40px] mt-2 relative pl-4"
+          className="rounded-3xl w-[90%] ml-auto mr-auto flex items-center h-[40px] mt-2 relative pl-4 bg-purple-700"
         >
-          <div>{task.task}</div>
+          <div className="text-[18px]">{task.task}</div>
           <div className="absolute right-[20px] cursor-pointer">
             <ImCancelCircle
               onClick={() => handleDisplayTaskRemoval(task)}
-              className="text-red-900 text-2xl"
+              className="text-white text-[18px] hover:text-gray-300"
             />
           </div>
         </div>

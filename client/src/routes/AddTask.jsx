@@ -13,7 +13,7 @@ import { bucketActions } from "../store/bucketSlice";
 import { IoIosSave } from "react-icons/io";
 
 const AddTask = () => {
-  const apiUrl = import.meta.env.BACKEND_URI;
+  const apiUrl = import.meta.env.VITE_BACKEND_URI;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [displayTask, setDisplayTask] = useState([]);
@@ -71,7 +71,7 @@ const AddTask = () => {
     try {
       const response = await axios.post(`${apiUrl}/add-task`, bucket);
     } catch (error) {
-      console.error("Error sending data:", error);
+      console.error("Error sending data:", error.message);
     }
 
     bucketTitle.current.value = "";
